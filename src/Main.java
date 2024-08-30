@@ -15,7 +15,6 @@ public class Main {
 
         Scanner s = new Scanner(f);
         s.nextLine();
-        ArrayList<String> badLines = new ArrayList<>();
         while (s.hasNextLine()) {
             String line = s.nextLine();
             try {
@@ -50,21 +49,18 @@ public class Main {
             } catch (Exception e) {
                 System.out.println("Error processing line: " + line);
                 e.printStackTrace();
-                badLines.add(line);
             }
         }
         saveToReport1(appsPerCategory);
         saveToReport2(companiesWithTheMostApps);
         saveToReport3(developersWithTheMostApps);
-        saveToReport4_1(pricePerApp);
-        saveToReport4_2(pricePerApp);
+        saveToReport4(pricePerApp, 1000, "reports/app_purchasing_power1.csv");
+        saveToReport4(pricePerApp, 10000, "reports/app_purchasing_power2.csv");
         saveToReport5(totalNumberOfDownloads);
-        saveToBadLines(badLines);
     }
 
-
     private static void saveToReport5(Map<String, Long> totalNumberOfDownloads) throws IOException {
-        FileWriter fw = new FileWriter("Report 5.csv");
+        FileWriter fw = new FileWriter("reports/download_statistics.csv");
         fw.write("Free, number of downloads\n");
         for (Map.Entry<String, Long> entry : totalNumberOfDownloads.entrySet()) {
             fw.write(entry.getKey() + ", " + entry.getValue() + "\n");
@@ -74,12 +70,12 @@ public class Main {
 
     }
 
-    private static void saveToReport4_2(Map<String, Double> pricePerApp) throws IOException {
+    private static void saveToReport4(Map<String, Double> pricePerApp, int i, String s) throws IOException {
         List<Map.Entry<String, Double>> entryList = new ArrayList<>(pricePerApp.entrySet());
         entryList.sort((entry1, entry2) -> (entry2.getValue().compareTo(entry1.getValue())));
-        FileWriter fw = new FileWriter("Report 4_2.csv");
-        fw.write("Apps we can buy with $10000:\n");
-        Double value = 10000.0;
+        FileWriter fw = new FileWriter(s);
+        fw.write("Apps we can buy with $" + i + ":\n\n");
+        Double value = (double) i;
         for (Map.Entry<String, Double> entry : entryList) {
             if (entry.getValue() <= value) {
                 value -= entry.getValue();
@@ -89,27 +85,9 @@ public class Main {
 
         fw.close();
     }
-
-    private static void saveToReport4_1(Map<String, Double> pricePerApp) throws IOException {
-        List<Map.Entry<String, Double>> entryList = new ArrayList<>(pricePerApp.entrySet());
-        entryList.sort((entry1, entry2) -> (entry2.getValue().compareTo(entry1.getValue())));
-        FileWriter fw = new FileWriter("Report 4_1.csv");
-        fw.write("Apps we can buy with $1000:\n");
-        Double value = 1000.0;
-        for (Map.Entry<String, Double> entry : entryList) {
-            if (entry.getValue() <= value) {
-                value -= entry.getValue();
-                fw.write(entry.getKey() + "\n");
-            }
-        }
-
-        fw.close();
-    }
-
-
 
     private static void saveToReport3(Map<String, Integer> developersWithTheMostApps) throws IOException {
-        FileWriter fw = new FileWriter("Report 3.csv");
+        FileWriter fw = new FileWriter("reports/independent_developers.csv");
         fw.write("developer, number of apps \n");
         List<Map.Entry<String, Integer>> entryList = new ArrayList<>(developersWithTheMostApps.entrySet());
         entryList.sort((entry1, entry2) -> (entry2.getValue().compareTo(entry1.getValue())));
@@ -121,10 +99,8 @@ public class Main {
         fw.close();
     }
 
-
-
     private static void saveToReport2(Map<String, Integer> companiesWithTheMostApps) throws IOException {
-        FileWriter fw = new FileWriter("Report 2.csv");
+        FileWriter fw = new FileWriter("reports/top_app_publishers.csv");
         fw.write("company, number of apps \n");
 
         List<Map.Entry<String, Integer>> entryList = new ArrayList<>(companiesWithTheMostApps.entrySet());
@@ -138,19 +114,11 @@ public class Main {
     }
 
     private static void saveToReport1(Map<String, Integer> appsPerCategory) throws IOException {
-        FileWriter fw = new FileWriter("Report 1.csv");
+        FileWriter fw = new FileWriter("reports/category_distribution.csv");
         fw.write("category, number of apps\n");
 
         for (Map.Entry<String, Integer> entry : appsPerCategory.entrySet()) {
             fw.write(entry.getKey() + ", " + entry.getValue() + "\n");
-        }
-        fw.close();
-    }
-
-    private static void saveToBadLines(ArrayList<String> badLines) throws IOException {
-        FileWriter fw = new FileWriter("Bad Lines.csv");
-        for (String line : badLines){
-            fw.write(line + "\n");
         }
         fw.close();
     }
