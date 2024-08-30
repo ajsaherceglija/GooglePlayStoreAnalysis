@@ -54,8 +54,7 @@ public class Main {
         saveToReport1(appsPerCategory);
         saveToReport2(companiesWithTheMostApps);
         saveToReport3(developersWithTheMostApps);
-        saveToReport4(pricePerApp, 1000, "reports/app_purchasing_power1.csv");
-        saveToReport4(pricePerApp, 10000, "reports/app_purchasing_power2.csv");
+        saveToReport4(pricePerApp);
         saveToReport5(totalNumberOfDownloads);
     }
 
@@ -70,18 +69,30 @@ public class Main {
 
     }
 
-    private static void saveToReport4(Map<String, Double> pricePerApp, int i, String s) throws IOException {
+    private static void saveToReport4(Map<String, Double> pricePerApp) throws IOException {
         List<Map.Entry<String, Double>> entryList = new ArrayList<>(pricePerApp.entrySet());
         entryList.sort((entry1, entry2) -> (entry2.getValue().compareTo(entry1.getValue())));
-        FileWriter fw = new FileWriter(s);
-        fw.write("Apps we can buy with $" + i + ":\n\n");
-        Double value = (double) i;
+        FileWriter fw = new FileWriter("reports/app_purchasing_power.csv");
+
+        Double value = 1000.0;
+        int count = 0;
         for (Map.Entry<String, Double> entry : entryList) {
             if (entry.getValue() <= value) {
                 value -= entry.getValue();
-                fw.write(entry.getKey() + "\n");
+                count++;
             }
         }
+        fw.write("We can buy " + count + " apps with $1000.\n\n");
+
+        value = 10000.0;
+        count = 0;
+        for (Map.Entry<String, Double> entry : entryList) {
+            if (entry.getValue() <= value) {
+                value -= entry.getValue();
+                count++;
+            }
+        }
+        fw.write("We can buy " + count + " apps with $10000.\n\n");
 
         fw.close();
     }
