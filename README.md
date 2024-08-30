@@ -11,3 +11,9 @@ The main objectives of this project are:
 3. **Independent Developers**: Find the top 3 developers with the most applications developed who do not work for the company that released the app, based on the Developer Email column.
 4. **App Purchasing Power**: Calculate the number of apps that can be purchased with $1000 and $10,000, starting with the most expensive apps first.
 5. **Download Statistics**: Compare the total number of downloads for free apps versus paid apps.
+
+## Dataset
+
+The full dataset is hosted on Google Drive due to its large size. You can download the dataset using the following link:
+
+[Download Dataset from Google Drive](https://drive.google.com/file/d/1HOp925ws6dX3-5OUxYBWi48Ob0hwNOI3/view?usp=sharing)
